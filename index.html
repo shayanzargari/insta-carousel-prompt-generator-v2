@@ -3,25 +3,71 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Carousel Prompt Studio V2</title>
-<link rel="stylesheet" href="src/style.css">
+<title>Carousel Prompt Studio V4</title>
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: #1a1a1a;
+    background: radial-gradient(circle at top left, rgba(196,162,101,.18), transparent 34%), #f3eee6;
+  }
+  main {
+    width: min(680px, calc(100vw - 32px));
+    padding: 28px;
+    border: 1px solid rgba(26,26,26,.12);
+    border-radius: 22px;
+    background: rgba(255,255,255,.72);
+    box-shadow: 0 22px 60px rgba(32,20,8,.14);
+    text-align: center;
+  }
+  h1 { margin: 0 0 8px; font-size: 24px; letter-spacing: -.04em; }
+  p { margin: 0; color: #736b60; line-height: 1.5; }
+  .bar { height: 8px; margin-top: 20px; border-radius: 999px; background: rgba(26,26,26,.1); overflow: hidden; }
+  .fill { height: 100%; width: 40%; border-radius: inherit; background: #c4a265; animation: load 1.1s ease-in-out infinite alternate; }
+  @keyframes load { from { transform: translateX(-100%); } to { transform: translateX(260%); } }
+</style>
 </head>
 <body>
-<header class="top">
-  <div class="brand"><div class="logo">🧩</div><div><h1>Carousel Prompt Studio V2</h1><p>Live carousel prompts, captions, CTA copy, and TXT export.</p></div></div>
-  <div class="actions"><button id="saveBtn">Save</button><button id="loadBtn">Load</button><button id="addBtn">Add slide</button><button class="dark" id="exportBtn">Export TXT</button></div>
-</header>
-<main class="wrap">
-<section class="left">
-<nav class="tabs"><button class="tab on" data-page="setup">Setup</button><button class="tab" data-page="design">Design</button><button class="tab" data-page="slides">Slides</button><button class="tab" data-page="output">Output</button></nav>
-<section class="page on" id="setup"><div class="card"><h2>Brand and topic</h2><label>Brand<input data-bind="brand"></label><label>Handle<input data-bind="handle"></label><label>Carousel title<textarea data-bind="topic"></textarea></label><label>Subtitle<input data-bind="subtitle"></label><label>Audience<input data-bind="audience"></label><label>CTA<textarea data-bind="cta"></textarea></label></div></section>
-<section class="page" id="design"><div class="card"><h2>Design</h2><label>Aspect<select data-bind="aspect"><option value="34">3:4</option><option value="45">4:5</option><option value="11">1:1</option></select></label><label>Theme<select id="theme"><option value="cream">Editorial Cream</option><option value="dark">Dark Luxury</option><option value="saas">Clean SaaS</option><option value="bold">Viral Bold</option></select></label><label>Background<input type="color" data-bind="colors.bg"></label><label>Text<input type="color" data-bind="colors.text"></label><label>Accent<input type="color" data-bind="colors.accent"></label><label>Visual<input type="color" data-bind="colors.visual"></label></div></section>
-<section class="page" id="slides"><div class="card"><h2>Slide list</h2><div id="slideList"></div></div><div class="card"><h2>Active slide</h2><label>Tag<input id="sTag"></label><label>Visual<select id="sVisual"><option>editorial</option><option>data</option><option>frame</option><option>minimal</option></select></label><label>Title<textarea id="sTitle"></textarea></label><label>Body<textarea id="sBody"></textarea></label><label>Title Y<input type="range" id="titleY" min="18" max="75"></label><label>Body Y<input type="range" id="bodyY" min="25" max="82"></label></div></section>
-<section class="page" id="output"><div class="card"><h2>Generated package</h2><button class="dark" id="copyBtn">Copy all</button><pre id="out"></pre></div></section>
-</section>
-<section class="right"><div class="stage"><div><div id="active"></div><p class="hint">Drag title, body, or tag blocks inside the preview. Positions are saved per slide.</p></div><div id="thumbs"></div></div></section>
+<main>
+  <h1>Loading Carousel Prompt Studio V4</h1>
+  <p>The full fixed V4 app is loading from the repository payload.</p>
+  <div class="bar"><div class="fill"></div></div>
 </main>
-<div id="toast"></div>
-<script src="src/app.js"></script>
+<script>
+(async function () {
+  const files = [
+    'payload/v4-00.txt','payload/v4-01.txt','payload/v4-02.txt','payload/v4-03.txt','payload/v4-04.txt',
+    'payload/v4-05.txt','payload/v4-06.txt','payload/v4-07.txt','payload/v4-08.txt','payload/v4-09.txt'
+  ];
+
+  async function loadText(path) {
+    const response = await fetch(path, { cache: 'no-store' });
+    if (!response.ok) throw new Error('Could not load ' + path);
+    return response.text();
+  }
+
+  try {
+    if (!('DecompressionStream' in window)) {
+      throw new Error('This browser does not support DecompressionStream. Please use current Chrome, Edge, or Firefox.');
+    }
+    const encoded = (await Promise.all(files.map(loadText))).join('').replace(/\s+/g, '');
+    const binary = atob(encoded);
+    const bytes = Uint8Array.from(binary, c => c.charCodeAt(0));
+    const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));
+    const html = await new Response(stream).text();
+    document.open();
+    document.write(html);
+    document.close();
+  } catch (error) {
+    document.body.innerHTML = '<main><h1>Could not load Carousel Prompt Studio V4</h1><p>' + String(error.message || error) + '</p></main>';
+    console.error(error);
+  }
+})();
+</script>
 </body>
 </html>
