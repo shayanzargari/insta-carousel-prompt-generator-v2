@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Carousel Prompt Studio V2</title>
+<link rel="stylesheet" href="src/style.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand"><div class="logo">🧩</div><div><h1>Carousel Prompt Studio V2</h1><p>Live carousel prompts, captions, CTA copy, and TXT export.</p></div></div>
+  <div class="actions"><button id="saveBtn">Save</button><button id="loadBtn">Load</button><button id="addBtn">Add slide</button><button class="dark" id="exportBtn">Export TXT</button></div>
+</header>
+<main class="wrap">
+<section class="left">
+<nav class="tabs"><button class="tab on" data-page="setup">Setup</button><button class="tab" data-page="design">Design</button><button class="tab" data-page="slides">Slides</button><button class="tab" data-page="output">Output</button></nav>
+<section class="page on" id="setup"><div class="card"><h2>Brand and topic</h2><label>Brand<input data-bind="brand"></label><label>Handle<input data-bind="handle"></label><label>Carousel title<textarea data-bind="topic"></textarea></label><label>Subtitle<input data-bind="subtitle"></label><label>Audience<input data-bind="audience"></label><label>CTA<textarea data-bind="cta"></textarea></label></div></section>
+<section class="page" id="design"><div class="card"><h2>Design</h2><label>Aspect<select data-bind="aspect"><option value="34">3:4</option><option value="45">4:5</option><option value="11">1:1</option></select></label><label>Theme<select id="theme"><option value="cream">Editorial Cream</option><option value="dark">Dark Luxury</option><option value="saas">Clean SaaS</option><option value="bold">Viral Bold</option></select></label><label>Background<input type="color" data-bind="colors.bg"></label><label>Text<input type="color" data-bind="colors.text"></label><label>Accent<input type="color" data-bind="colors.accent"></label><label>Visual<input type="color" data-bind="colors.visual"></label></div></section>
+<section class="page" id="slides"><div class="card"><h2>Slide list</h2><div id="slideList"></div></div><div class="card"><h2>Active slide</h2><label>Tag<input id="sTag"></label><label>Visual<select id="sVisual"><option>editorial</option><option>data</option><option>frame</option><option>minimal</option></select></label><label>Title<textarea id="sTitle"></textarea></label><label>Body<textarea id="sBody"></textarea></label><label>Title Y<input type="range" id="titleY" min="18" max="75"></label><label>Body Y<input type="range" id="bodyY" min="25" max="82"></label></div></section>
+<section class="page" id="output"><div class="card"><h2>Generated package</h2><button class="dark" id="copyBtn">Copy all</button><pre id="out"></pre></div></section>
+</section>
+<section class="right"><div class="stage"><div><div id="active"></div><p class="hint">Drag title, body, or tag blocks inside the preview. Positions are saved per slide.</p></div><div id="thumbs"></div></div></section>
+</main>
+<div id="toast"></div>
+<script src="src/app.js"></script>
+</body>
+</html>
